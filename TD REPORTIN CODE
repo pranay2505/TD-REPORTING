@@ -1,0 +1,693 @@
+SE ROLE CUSTOMER_ANALYTICS_DEVELOPER;
+USE WAREHOUSE ADW_DEFAULT_ADHOC_WH;
+USE DATABASE CUSTOMER_ANALYTICS;
+USE SCHEMA SANDBOX;
+
+CREATE OR REPLACE TABLE dates_TW2(week_no NUMBER(28, 10));
+CREATE OR REPLACE TABLE date_map_TW2(fin_week NUMBER(28, 10), week_number NUMBER(28, 10));
+CREATE OR REPLACE TABLE date_map2_TW2(calendar_date DATE, fin_week NUMBER(28, 10), week_number NUMBER(28, 10));
+CREATE OR REPLACE TABLE spendweek_TW2(hashed_id STRING, week_number NUMBER(28, 10), party_account_type_code NUMBER(28, 10), spend NUMBER(28, 10), countspend NUMBER(28, 10), countitem NUMBER(28, 10));
+CREATE OR REPLACE TABLE Campcoup_TD_TW2(transaction_date DATE,externalhandle STRING,campaign_id INT, points_earned NUMBER(28, 10),barcode STRING, Redeem_qty NUMBER(28, 10), print_qty NUMBER(28, 10), processing_cost NUMBER(28, 10), creation_cost NUMBER(28, 10));
+CREATE OR REPLACE TABLE shopped2_TW2(hashed_id STRING,spend NUMBER(28, 10));
+CREATE OR REPLACE TABLE noncontrol_TW2(inferred_customer_id STRING,Campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE control_TW2(inferred_customer_id STRING,Campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE targeted_TW2(inferred_customer_id STRING,Campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE targeted2_TW2(inferred_customer_id STRING, hashed_id STRING,Campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE cust_net_TW2(hashed_id STRING, campaign_id INT,target_flag NUMBER(28, 10));
+
+
+
+CREATE OR REPLACE TABLE hashed_targets_TW2(hashed_id STRING,campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE inferred_control_TW2(hashed_id STRING,campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE exclusions_TW2(hashed_id STRING,campaign_id INT, target_flag NUMBER(28, 10));
+
+
+
+CREATE OR REPLACE TABLE CaT_SS_mail_TW2(hashed_id STRING,Campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE CaT_SS_control_TW2(hashed_id STRING,Campaign_id INT, target_flag NUMBER(28, 10));
+CREATE OR REPLACE TABLE CaT_SS_redeemers_TW2(externalhandle STRING,hashed_id STRING,Campaign_id INT);
+CREATE OR REPLACE TABLE uplift_TW2(target_flag NUMBER(28, 10), hashed_id STRING,campaign_id INT, flag STRING, control_ind NUMBER(28, 10),mail_ind NUMBER(28, 10),redeem_ind NUMBER(28, 10));
+CREATE OR REPLACE TABLE uplift2_TW2(target_flag NUMBER(28, 10), externalhandle STRING,week_number NUMBER(28, 10),campaign_id INT, party_account_type_code NUMBER(28, 10),spend NUMBER(28, 10),countspend NUMBER(28, 10),countitem NUMBER(28, 10),flag STRING);
+CREATE OR REPLACE TABLE pop_freq_TW2(flag STRING,campaign_id INT, _freq_ NUMBER(28, 10));
+CREATE OR REPLACE TABLE IR_TW2(flag STRING, week_number NUMBER(28, 10),campaign_id INT, spend NUMBER(28, 10));
+CREATE OR REPLACE TABLE IR2_TW2(flag STRING, week_number NUMBER(28, 10),campaign_id INT, spend NUMBER(28, 10), _freq_ NUMBER(28, 10));
+CREATE OR REPLACE TABLE visits_TW2(flag STRING, week_number NUMBER(28, 10),campaign_id INT, countspend NUMBER(28, 10));
+CREATE OR REPLACE TABLE visits2_TW2(flag STRING, week_number NUMBER(28, 10),CAMPAIGN_ID INT, countspend NUMBER(28, 10), _freq_ NUMBER(28, 10));
+CREATE OR REPLACE TABLE pounds_control_TW2(spendwk NUMBER(28, 10),campaign_id INT, pounds_control NUMBER(28, 10));
+CREATE OR REPLACE TABLE all_mailed_pounds_TW2(spendwk NUMBER(28, 10),campaign_id INT, all_mailed_pounds NUMBER(28, 10));
+CREATE OR REPLACE TABLE sum_customers_TW2(week_number NUMBER(28, 10),campaign_id, _freq_ NUMBER(28, 10));
+CREATE OR REPLACE TABLE control_mailed_pounds_TW2(spendwk NUMBER(28, 10),campaign_id INT, control_mailed_pounds NUMBER(28, 10));
+CREATE OR REPLACE TABLE mailed_pounds_TW2(spendwk NUMBER(28, 10),campaign_id INT, mailed_pounds NUMBER(28, 10));
+CREATE OR REPLACE TABLE final_uplift_TW2(spendwk NUMBER(28, 10),campaign_id, uplift NUMBER(28, 10));
+CREATE OR REPLACE TABLE pounds_control2_TW2(spendwk NUMBER(28, 10),campaign_id, pounds_control NUMBER(28, 10));
+CREATE OR REPLACE TABLE all_mailed_pounds2_TW2(spendwk NUMBER(28, 10),campaign_id, all_mailed_pounds NUMBER(28, 10));
+CREATE OR REPLACE TABLE sum_customers2_TW2(week_number NUMBER(28, 10),campaign_id INT, _freq_ NUMBER(28, 10));
+CREATE OR REPLACE TABLE control_mailed_pounds2_TW2(spendwk NUMBER(28, 10),campaign_id INT, control_mailed_pounds NUMBER(28, 10));
+CREATE OR REPLACE TABLE mailed_pounds2_TW2(spendwk NUMBER(28, 10),campaign_id INT, mailed_pounds NUMBER(28, 10));
+CREATE OR REPLACE TABLE final_uplift2_TW2(spendwk NUMBER(28, 10),campaign_id INT, uplift NUMBER(28, 10));
+CREATE OR REPLACE TABLE reds_TW2(week_no INT,campaign_id INT, redemption_rate NUMBER(28, 3),creations INT,redemptions INT, processing_cost NUMBER(28, 3),creation_cost NUMBER(28, 3), points_earned INT);
+
+
+
+
+
+CREATE OR REPLACE TABLE customer_analytics.reporting.TD_MSTR_Output2(week_no INT,TD_week INT,campaign_id INT, sales_uplift NUMBER(28, 3),redemption_cost NUMBER(28, 3),processing_cost NUMBER(28, 3),creation_cost NUMBER(28, 3),total_cost NUMBER(28, 3),ROI NUMBER(28, 3),Profit NUMBER(28, 3),redemption_rate NUMBER(28, 3),incremental_visits NUMBER(28, 3),Average_Basket NUMBER(28, 3));
+CREATE OR REPLACE TABLE Wave_totals_TW2(wave INT, sales_uplift NUMBER(28, 10),redemption_cost NUMBER(28, 10), processing_cost NUMBER(28, 10), creation_cost NUMBER(28, 10),incremental_visits NUMBER(28, 10));
+CREATE OR REPLACE TABLE avg_bask_new_TW2(wave INT, average_basket NUMBER(28, 10));
+CREATE OR REPLACE TABLE avg_bask_TW2(wave INT, average_basket NUMBER(28, 10));
+CREATE OR REPLACE TABLE control_spend_sig_test3_TW2(target_flag STRING, externalhandle STRING,spend NUMBER(28, 10));
+CREATE OR REPLACE TABLE sales_significance_total_w2_TW2(target_flag STRING, N INT, mean NUMBER(28, 10), STD NUMBER(28, 10), total NUMBER(28, 10));
+Create or Replace Table TD_Campaign_id_PP(Campaign_id INT,offer_type STRING);
+
+SET TD_start_week = 1038;
+SET start_print_date = '2020-06-22';
+SET end_print_date = '2020-04-18';
+SET end_first_week = '2020-06-27';
+
+SET end_date = '2020-04-26';
+
+ insert overwrite into TD_Campaign_id_PP select distinct campaign_id,offer_type
+from CUSTOMER_ANALYTICS.REPORTING.TARGET_CUST_TD_202006;
+
+truncate dates_TW2;
+
+insert overwrite into dates_TW2 select distinct week_no
+from adw_prod.edw_pl.vw_date_map
+where calendar_date >= '2010-02-28'
+order by 1;
+
+insert overwrite into date_map_TW2 select
+week_no as fin_week, row_number() over (order by week_no) +499 as week_number
+from dates_TW2;
+
+insert overwrite into date_map2_TW2 select
+a.calendar_date, b.fin_week, b.week_number
+from adw_prod.edw_pl.vw_date_map a, date_map_TW2 b
+where a.week_no=b.fin_week
+order by a.calendar_date desc;
+
+
+insert overwrite into spendweek_TW2
+select distinct accnt.loyalty_id as hashed_id,
+              week_number,
+			  tran.party_account_type_code,
+              sum(tran.transaction_value) as spend,
+              count(tran.transaction_value) as countspend,
+			  sum(tran.transaction_item_count) as countitem
+
+				from ADW_PROD.INC_PL.CUSTOMER_DIM as accnt,
+					 ADW_PROD.INC_PL.TRANSACTION_DIM as tran,
+					 adw_prod.edw_pl.vw_location_map_current as l,
+                     adw_prod.edw_pl.vw_location_map as l1,
+					 adw_prod.edw_pl.vw_date_map as edw_dates,
+                     date_map_TW2 as td_dates
+
+				where
+                edw_dates.calendar_date=tran.date_key /*get the edw financial weeks based on transaction date*/
+				and		accnt.customer_key=tran.customer_key
+                and     edw_dates.week_no = td_dates.fin_week
+				and     tran.location_key = l.location_key
+                and     l.location_key=l1.location_key
+
+                and     td_dates.week_number >= $TD_start_week -20
+                and     td_dates.week_number <= (select week_number from date_map2_TW2 where calendar_date=previous_day(current_date(), 'Saturday'))
+
+				group by 1,2,3
+				order by 1,2,3
+;
+
+insert overwrite into Campcoup_TD_TW2 select distinct point_red."eventDate" as transaction_date ,
+        point_red."externalHandle" as externalhandle,
+                                                      Campaign_id,
+		case when point_red."appliedState"='REDEEMED' then point_red."POINTS" end AS points_earned,
+		point_red."campaignId" as barcode,
+        case when point_red."appliedState"='REDEEMED' then 1 else 0 end as Redeem_qty,
+        case when point_red."appliedState"='CREATED' then 1 else 0 end as print_qty,
+        case when redeem_qty=1 then 0.0025 else 0 end as processing_cost,
+        case when print_qty=1 then 0.0025 else 0 end as creation_cost
+     from CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD as point_red
+         inner join TD_Campaign_id_PP
+     on TD_Campaign_id_PP.Campaign_id=CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD.campaignId
+     inner join
+     (select distinct b."externalHandle", case when c.print_date is null then $start_print_date else c.print_date end as print_date from (select distinct "externalHandle" from CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD
+   inner join TD_Campaign_id_PP
+     on TD_Campaign_id_PP.campaign_id=CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD.campaignId
+     where ("eventDate"  between $start_print_date and $end_print_date)
+and "appliedState" in ('CREATED')
+
+and "eventDate" < current_date()) b
+full outer join
+      (select distinct "externalHandle", "eventDate" as print_date from CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD
+inner join TD_Campaign_id_PP
+     on TD_Campaign_id_PP.campaign_id=CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD.campaignId
+      where ("eventDate"  between $start_print_date and $end_first_week)
+and "appliedState" in ('CREATED')
+
+and "eventDate" < current_date()) c
+on b."externalHandle"=c."externalHandle") d
+on point_red."externalHandle"=d."externalHandle"
+
+inner join (select distinct b."externalHandle", case when c.print_date is null then $end_date + 1 else c.print_date end as print_date from
+     (select distinct "externalHandle" from CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD
+     inner join TD_Campaign_id_PP
+     on TD_Campaign_id_PP.campaign_id=CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD.campaignId
+     where ("eventDate"  between $start_print_date and $end_print_date)
+and "appliedState" in ('CREATED')
+
+and "eventDate" < current_date()) e
+full outer join (select distinct "externalHandle", "eventDate" as print_date from CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD
+inner join TD_Campaign_id_PP
+     on TD_Campaign_id_PP.campaign_id=CUSTOMER_ANALYTICS.PRODUCTION.OFFER_FEEDBACK_TD.campaignId
+where ("eventDate"  between $end_print_date + 1 and $end_date)
+and "appliedState" in ('CREATED')
+and "eventDate" < current_date()) f
+on b."externalHandle"=c."externalHandle") g
+on point_red."externalHandle"=d."externalHandle"
+
+
+ where (point_red."eventDate"  between $start_print_date and $end_date)
+ and point_red."eventDate" >= d.print_date
+ and point_red."eventDate" < g.print_date
+and point_red."appliedState" in ('REDEEMED','CREATED')
+and point_red."eventDate" <= previous_day(current_date(), 'Saturday')
+order by point_red."externalHandle";
+
+
+insert overwrite into noncontrol_TW2 select
+distinct "KRANG_CUSTOMER_ID" as inferred_customer_id,campaign_id, 1 as target_flag
+from CUSTOMER_ANALYTICS.REPORTING.TARGET_CUST_TD_202006
+order by "KRANG_CUSTOMER_ID";
+
+insert overwrite into control_TW2 select
+distinct "KRANG_CUSTOMER_ID" as inferred_customer_id,campaign_id, 0 as target_flag
+from CUSTOMER_ANALYTICS.REPORTING.CONTROL_CUST_TD_202006
+order by "KRANG_CUSTOMER_ID";
+
+insert overwrite into targeted_TW2 select
+distinct coalesce(a.inferred_customer_id,b.inferred_customer_id) as inferred_customer_id, coalesce(a.target_flag, b.target_flag) as target_flag
+,coalesce(a.campaign_id,b.campaign_id) as campaign_id
+from noncontrol_TW2 a full outer join control_TW2 b
+on a.inferred_customer_id=b.inferred_customer_id
+and a.target_flag=b.target_flag
+and a.campaign_id=b.campaign_id;
+
+insert overwrite into targeted2_TW2 select
+distinct a.inferred_customer_id, b.loyalty_id as hashed_id,campaign_id, a.target_flag
+from targeted_TW2 a, ADW_PROD.INC_PL.CUSTOMER_DIM b
+where a.inferred_customer_id=b.inferred_customer_id;
+
+insert overwrite into cust_net_TW2 select distinct
+hashed_id,campaign_id, target_flag
+from targeted2_TW2
+where hashed_id is not null;
+
+insert overwrite into hashed_targets_TW2
+select *
+from cust_net_TW2
+where target_flag = 1
+;
+
+insert overwrite into inferred_control_TW2
+select distinct
+*
+from cust_net_TW2
+where target_flag = 0
+;
+
+insert overwrite into exclusions_TW2 select a.* from hashed_targets_TW2 a inner join inferred_control_TW2 b
+on a.hashed_id = b.hashed_id
+;
+
+insert overwrite into cust_net_TW2 select
+distinct
+a.hashed_id,
+camapign_id
+,a.target_flag
+from cust_net_TW2 a left join exclusions_TW2 b
+on a.hashed_id=b.hashed_id
+where b.hashed_id is null;
+
+insert overwrite into CaT_SS_mail_TW2 select
+distinct *
+from cust_net_TW2
+where target_flag = 1
+order by hashed_id;
+
+insert overwrite into CaT_SS_control_TW2 select
+distinct *
+from cust_net_TW2
+where target_flag= 0
+order by hashed_id;
+
+insert overwrite into CaT_SS_redeemers_TW2 select
+distinct a.externalhandle,
+c.hashed_loyalty_id as hashed_id,campaign_id
+from Campcoup_TD_TW2 a,
+CUSTOMER_ANALYTICS.PRODUCTION.FULL_EXTERNALHANDLE_FILE c
+where
+a.externalhandle=c.externalhandle
+and a.redeem_qty>0
+order by hashed_id;
+
+insert overwrite into uplift_TW2 select
+target_flag,
+hashed_id,
+campaign_id,
+case when control_ind=1 and redeem_ind !=1 then 'CN'
+when mail_ind=1 and redeem_ind=1 then 'RD'
+when redeem_ind=1 and mail_ind !=1 then 'error'
+when redeem_ind !=1 and mail_ind=1 then 'NR'
+end as flag,
+control_ind,
+mail_ind,
+redeem_ind
+from (
+select
+distinct hashed_id,
+max(target_flag) as target_flag,
+max(control_ind) as control_ind,
+max(mail_ind) as mail_ind,
+max(redeem_ind) as redeem_ind
+from
+(
+select
+distinct
+coalesce(a.target_flag,b.target_flag) as target_flag,
+coalesce(a.hashed_id,b.hashed_id, c.hashed_id) as hashed_id,
+coalesce(a.campaign_id,b.campaign_id,c.campaign_id) as campaign_id,
+case when a.hashed_id is not null then 1 else 0 end as control_ind,
+case when b.hashed_id is not null then 1 else 0 end as mail_ind,
+case when c.hashed_id is not null then 1 else 0 end as redeem_ind
+from
+CaT_SS_control_TW2 a full join CaT_SS_mail_TW2 b
+on a.hashed_id=b.hashed_id
+full join CaT_SS_redeemers_TW2 c
+on b.hashed_id=c.hashed_id
+)
+group by hashed_id and campaign_id
+)
+where hashed_id is not null
+order by hashed_id;
+
+insert overwrite into uplift2_TW2 select distinct
+a.target_flag,
+c.externalhandle,
+b.week_number,
+ a.campaign_id,
+b.party_account_type_code,
+b.spend,
+b.countspend,
+b.countitem,
+a.flag
+from uplift_TW2 a, spendweek_TW2 b, CUSTOMER_ANALYTICS.PRODUCTION.FULL_EXTERNALHANDLE_FILE c
+where a.hashed_id=b.hashed_id
+and a.hashed_id=c.hashed_loyalty_id
+and week_number >= $TD_start_week - 20
+and a.flag not in ('error')
+;
+
+insert overwrite into pop_freq_TW2
+select	distinct flag,
+                campaign_id,
+		count(distinct externalhandle) as _FREQ_
+from uplift2_TW2
+group by 1,2;
+
+
+insert overwrite into IR_TW2 select
+flag,
+week_number,
+campaign_id,
+sum(spend) as spend
+from uplift2_TW2
+group by 1,2,3;
+
+insert overwrite into IR2_TW2 select
+a.*,b._freq_
+from IR_TW2 a, pop_freq_TW2 b
+where a.flag=b.flag
+order by flag, week_number asc;
+
+insert overwrite into visits_TW2 select
+flag,
+week_number,
+                                        campaign_id,
+sum(countspend) as countspend
+from uplift2_TW2
+group by 1,2;
+
+insert overwrite into visits2_TW2 select
+a.*,b._freq_
+from visits_TW2 a, pop_freq_TW2 b
+where a.flag=b.flag
+order by flag, week_number asc;
+
+insert overwrite into pounds_control_TW2 select
+week_number as spendwk,campaign_id, spend/_freq_ as pounds_control
+from IR2_TW2
+where flag='CN';
+
+insert overwrite into all_mailed_pounds_TW2 select
+week_number as spendwk, campaign_id,sum(spend)/sum(_freq_) as all_mailed_pounds
+from IR2_TW2
+where flag in ('RD','NR')
+group by 1,2;
+
+insert overwrite into sum_customers_TW2 select
+week_number,campaign_id, sum(_freq_) as _freq_
+from IR2_TW2
+where flag in ('RD','NR')
+group by 1,2;
+
+insert overwrite into control_mailed_pounds_TW2 select
+c.week_number as spendwk,c.campaign_id, d.pounds_control*c._freq_*(select
+avg(b.all_mailed_pounds/a.pounds_control) as ratio
+from pounds_control_TW2 a, all_mailed_pounds_TW2 b
+where a.spendwk=b.spendwk
+and a.spendwk <= $TD_start_week -1)
+as control_mailed_pounds
+from sum_customers_TW2 c, pounds_control_TW2 d
+where c.week_number=d.spendwk;
+
+insert overwrite into mailed_pounds_TW2 select
+week_number as spendwk,campaign_id, sum(spend) as mailed_pounds
+from IR2_TW2
+where flag in ('RD','NR')
+group by 1;
+
+insert overwrite into Final_Uplift_TW2 select
+a.spendwk,a.campaign_id, a.mailed_pounds-b.control_mailed_pounds as uplift
+from mailed_pounds_TW2 a, control_mailed_pounds_TW2 b
+where a.spendwk=b.spendwk
+and a.spendwk >= $TD_start_week;
+
+insert overwrite into pounds_control2_TW2 select
+week_number as spendwk,campaign_id, countspend/_freq_ as pounds_control
+from visits2_TW2
+where flag='CN';
+
+insert overwrite into all_mailed_pounds2_TW2 select
+week_number as spendwk,CAMPAIGN_ID, sum(countspend)/sum(_freq_) as all_mailed_pounds
+from visits2_TW2
+where flag in ('RD','NR')
+group by 1,2;
+
+
+insert overwrite into sum_customers2_TW2 select
+week_number,CAMPAIGN_ID, sum(_freq_) as _freq_
+from visits2_TW2
+where flag in ('RD','NR')
+group by 1,2;
+
+insert overwrite into control_mailed_pounds2_TW2 select
+c.week_number as spendwk,c.campaign_id, d.pounds_control*c._freq_*(select
+avg(b.all_mailed_pounds/a.pounds_control) as ratio
+from pounds_control2_TW2 a, all_mailed_pounds2_TW2 b
+where a.spendwk=b.spendwk
+  and a.campaign_id=b.campaign_id
+and a.spendwk <= $TD_start_week -1)
+as control_mailed_pounds
+from sum_customers2_TW2 c, pounds_control2_TW2 d
+where c.week_number=d.spendwk
+and c.campaign_id=d.campaign_id;
+
+insert overwrite into mailed_pounds2_TW2 select
+week_number as spendwk,CAMPAIGN_ID, sum(countspend) as mailed_pounds
+from visits2_TW2
+where flag in ('RD','NR')
+group by 1,2;
+
+insert overwrite into Final_Uplift2_TW2 select
+a.spendwk,a.campaign_id, a.mailed_pounds-b.control_mailed_pounds as uplift
+from mailed_pounds2_TW2 a, control_mailed_pounds2_TW2 b
+where a.spendwk=b.spendwk
+  and a.campaign_id=b.campaign_id
+and a.spendwk >= $TD_start_week;
+
+insert overwrite into reds_TW2
+  select b.week_no,
+         a.campaign_id,
+			case when sum(a.print_qty)=0 then 0 else sum (a.redeem_qty)/sum (a.print_qty) end as redemption_rate,
+            sum(a.print_qty) as creations,
+			sum (a.redeem_qty) as redemptions,
+            sum(a.processing_cost) as processing_cost,
+            sum(a.creation_cost) as creation_cost,
+			sum(a.points_earned) as points_earned
+  from Campcoup_td_TW2 as a
+  inner join adw_prod.edw_pl.vw_date_map as b
+  on a.transaction_date=b.calendar_date
+   where calendar_date < current_date()
+  group by week_no,campaign_id;
+
+insert into customer_analytics.reporting.TD_MSTR_Output2
+ select distinct a.week_no,
+           d.week_number as TD_week,
+           a.campaign_id,
+           b.uplift as sales_uplift,
+           a.points_earned*0.00425 as redemption_cost,
+           a.processing_cost,
+           a.creation_cost,
+           redemption_cost+processing_cost+creation_cost as total_cost,
+           ((sales_uplift*0.2239)/total_cost)-1 as ROI,
+           (sales_uplift*0.2239)-total_cost as Profit,
+           a.redemption_rate,
+           c.uplift as incremental_visits,
+           (a.points_earned/a.redemptions)/2 as Average_Basket
+ from reds_TW2 a, final_uplift_TW2 b, final_uplift2_TW2 c, date_map2_TW2 d
+ where b.spendwk=d.week_number
+   and a.campaign_id=b.campaign_id
+   and a.campaign_id=c.campaign_id
+ and c.spendwk=d.week_number
+ and a.week_no=d.fin_week
+ and d.week_number = (select week_number from date_map2_TW2 where calendar_date=previous_day(current_date(), 'Saturday'))
+ order by 2,3;
+
+
+var SQL_COMMAND_37 = `insert into customer_analytics.reporting.TD_MSTR_Output_Overall
+ select distinct 2 as Wave,
+                td_week-$TD_start_week +1 as Wave_week,
+            *
+ from customer_analytics.reporting.TD_MSTR_Output2
+ where td_week = (select week_number from date_map2_TW2 where calendar_date=previous_day(current_date(), 'Saturday'))
+;`;
+
+
+var SQL_COMMAND_38 = `insert overwrite into control_spend_sig_test_TW2 select
+target_flag, externalhandle, week_number, case when target_flag = 0 then spend*(select
+avg(b.all_mailed_pounds/a.pounds_control) as ratio
+from pounds_control_TW2 a, all_mailed_pounds_TW2 b
+where a.spendwk=b.spendwk
+and a.spendwk <= $TD_start_week-1) else spend end as spend
+from uplift2_TW2;`;
+
+var SQL_COMMAND_39 = `insert overwrite into customers_sig_TW2 select
+target_flag, count(distinct externalhandle) as N
+from control_spend_sig_test_TW2
+group by 1;`;
+
+var SQL_COMMAND_40 = `insert overwrite into customerlist_sig_TW2 select
+distinct a.target_flag, a.externalhandle, b.week_number
+from control_spend_sig_test_TW2 a cross join date_map_TW2 b
+where b.week_number > $TD_start_week -1
+and b.week_number < $TD_start_week +4
+order by 2,3;`;
+
+var SQL_COMMAND_41 = `insert overwrite into customerlist_nosales_sig1_TW2 select
+distinct a.target_flag, a.externalhandle, b.week_number
+from customerlist_sig_TW2 a left join control_spend_sig_test_TW2 b
+on a.externalhandle=b.externalhandle
+and a.week_number=b.week_number
+order by 2,3;`;
+
+var SQL_COMMAND_42 = `insert overwrite into customerlist_nosales_sig_TW2 select
+distinct a.target_flag, a.externalhandle, a.week_number, 0 as spend
+from customerlist_sig_TW2 a left join customerlist_nosales_sig1_TW2 b
+on a.externalhandle=b.externalhandle
+and a.week_number=b.week_number
+where b.week_number is null
+order by 2,3;`;
+
+var SQL_COMMAND_43 = `insert overwrite into control_spend_sig_test2_TW2
+select distinct coalesce(a.target_flag, b.target_flag) as target_flag,
+       coalesce(a.externalhandle,b.externalhandle) as externalhandle,
+       coalesce(a.week_number,b.week_number) as week_number,
+       coalesce(a.spend,b.spend) as spend from
+customerlist_nosales_sig_TW2 a full join control_spend_sig_test_TW2 b
+on a.externalhandle=b.externalhandle
+and a.week_number=b.week_number
+order by 2,3;`;
+
+var SQL_COMMAND_44 = `insert overwrite into Sales_significance_w2_TW2
+select
+target_flag, week_number, count(distinct externalhandle) as N, avg(spend) as mean, stddev(spend::FLOAT) as STD, sum(spend) as total
+from control_spend_sig_test2_TW2
+where target_flag is not null
+and week_number>$TD_start_week -1
+group by 1,2
+order by 1,2;`;
+
+var SQL_COMMAND_45 = `insert overwrite into Wave_totals_TW2
+ select distinct wave,
+           sum(sales_uplift) as sales_uplift,
+           sum(redemption_cost) as redemption_cost,
+           sum(processing_cost) as processing_cost,
+           sum(creation_cost) as creation_cost,
+           sum(incremental_visits) as incremental_visits
+from CUSTOMER_ANALYTICS.REPORTING.TD_MSTR_OUTPUT_OVERALL
+group by 1;`;
+
+var SQL_COMMAND_46 = `insert overwrite into avg_bask_new_TW2
+ select 2 as wave, (sum(a.points_earned)/sum(a.redemptions))/2 as Average_Basket
+  from reds_TW2 a;`;
+
+var SQL_COMMAND_47 = `insert overwrite into avg_bask_TW2
+select coalesce(a.wave, b.wave) as wave, coalesce(a.average_basket, b.average_basket) as Average_basket
+from avg_bask_New_TW2 a full join  (select * from  CUSTOMER_ANALYTICS.REPORTING.TD_MSTR_OUTPUT_WAVES where wave < (select max(wave) from CUSTOMER_ANALYTICS.REPORTING.TD_MSTR_OUTPUT_WAVES)) b
+on a.wave=b.wave
+order by 1;`;
+
+var SQL_COMMAND_48 = `insert overwrite into CUSTOMER_ANALYTICS.REPORTING.TD_MSTR_OUTPUT_WAVES
+select distinct b.wave,
+            b.sales_uplift,
+           b.redemption_cost,
+           b.processing_cost,
+           b.creation_cost,
+           b.redemption_cost+b.processing_cost+b.creation_cost as total_cost,
+           ((b.sales_uplift*0.2239)/total_cost)-1 as ROI,
+           (b.sales_uplift*0.2239)-total_cost as Profit,
+           b.processing_cost/b.creation_cost as redemption_rate,
+           b.incremental_visits,
+           a.average_basket
+from Wave_totals_TW2 b, avg_bask_TW2 a
+where a.wave=b.wave
+order by 1;`;
+
+var SQL_COMMAND_49 = `insert overwrite into control_spend_sig_test3_TW2 select
+distinct target_flag, externalhandle, sum(spend) as spend
+from control_spend_sig_test2_TW2
+where week_number>$TD_start_week -1
+group by 1,2;`;
+
+var SQL_COMMAND_50 = `insert overwrite into Sales_significance_total_w2_TW2 select
+target_flag, count(distinct externalhandle) as N, avg(spend) as mean, stddev(spend::FLOAT) as STD, sum(spend) as total
+from control_spend_sig_test3_TW2
+where target_flag is not null
+group by 1
+order by 1;`;
+
+
+
+
+
+
+
+
+
+var RS_1 = snowflake.execute({sqlText:SQL_COMMAND_1});
+var RS_2 = snowflake.execute({sqlText:SQL_COMMAND_2});
+var RS_3 = snowflake.execute({sqlText:SQL_COMMAND_3});
+var RS_4 = snowflake.execute({sqlText:SQL_COMMAND_4});
+var RS_5 = snowflake.execute({sqlText:SQL_COMMAND_5});
+var RS_6 = snowflake.execute({sqlText:SQL_COMMAND_6});
+var RS_8 = snowflake.execute({sqlText:SQL_COMMAND_8});
+var RS_9 = snowflake.execute({sqlText:SQL_COMMAND_9});
+var RS_10 = snowflake.execute({sqlText:SQL_COMMAND_10});
+var RS_11 = snowflake.execute({sqlText:SQL_COMMAND_11});
+var RS_12 = snowflake.execute({sqlText:SQL_COMMAND_12});
+var RS_12a = snowflake.execute({sqlText:SQL_COMMAND_12a});
+var RS_12b = snowflake.execute({sqlText:SQL_COMMAND_12b});
+var RS_12c = snowflake.execute({sqlText:SQL_COMMAND_12c});
+var RS_12d = snowflake.execute({sqlText:SQL_COMMAND_12d});
+var RS_13 = snowflake.execute({sqlText:SQL_COMMAND_13});
+var RS_14 = snowflake.execute({sqlText:SQL_COMMAND_14});
+var RS_15 = snowflake.execute({sqlText:SQL_COMMAND_15});
+var RS_16 = snowflake.execute({sqlText:SQL_COMMAND_16});
+var RS_17 = snowflake.execute({sqlText:SQL_COMMAND_17});
+var RS_18 = snowflake.execute({sqlText:SQL_COMMAND_18});
+var RS_19 = snowflake.execute({sqlText:SQL_COMMAND_19});
+var RS_20 = snowflake.execute({sqlText:SQL_COMMAND_20});
+var RS_21 = snowflake.execute({sqlText:SQL_COMMAND_21});
+var RS_22 = snowflake.execute({sqlText:SQL_COMMAND_22});
+var RS_23 = snowflake.execute({sqlText:SQL_COMMAND_23});
+var RS_24 = snowflake.execute({sqlText:SQL_COMMAND_24});
+var RS_25 = snowflake.execute({sqlText:SQL_COMMAND_25});
+var RS_26 = snowflake.execute({sqlText:SQL_COMMAND_26});
+var RS_27 = snowflake.execute({sqlText:SQL_COMMAND_27});
+var RS_28 = snowflake.execute({sqlText:SQL_COMMAND_28});
+var RS_29 = snowflake.execute({sqlText:SQL_COMMAND_29});
+var RS_30 = snowflake.execute({sqlText:SQL_COMMAND_30});
+var RS_31 = snowflake.execute({sqlText:SQL_COMMAND_31});
+var RS_32 = snowflake.execute({sqlText:SQL_COMMAND_32});
+var RS_33 = snowflake.execute({sqlText:SQL_COMMAND_33});
+var RS_34 = snowflake.execute({sqlText:SQL_COMMAND_34});
+var RS_35 = snowflake.execute({sqlText:SQL_COMMAND_35});
+var RS_36 = snowflake.execute({sqlText:SQL_COMMAND_36});
+var RS_37 = snowflake.execute({sqlText:SQL_COMMAND_37});
+var RS_38 = snowflake.execute({sqlText:SQL_COMMAND_38});
+var RS_39 = snowflake.execute({sqlText:SQL_COMMAND_39});
+var RS_40 = snowflake.execute({sqlText:SQL_COMMAND_40});
+var RS_41 = snowflake.execute({sqlText:SQL_COMMAND_41});
+var RS_42 = snowflake.execute({sqlText:SQL_COMMAND_42});
+var RS_43 = snowflake.execute({sqlText:SQL_COMMAND_43});
+var RS_44 = snowflake.execute({sqlText:SQL_COMMAND_44});
+var RS_45 = snowflake.execute({sqlText:SQL_COMMAND_45});
+var RS_46 = snowflake.execute({sqlText:SQL_COMMAND_46});
+var RS_47 = snowflake.execute({sqlText:SQL_COMMAND_47});
+var RS_48 = snowflake.execute({sqlText:SQL_COMMAND_48});
+var RS_49 = snowflake.execute({sqlText:SQL_COMMAND_49});
+var RS_50 = snowflake.execute({sqlText:SQL_COMMAND_50});
+
+
+
+  return "END";
+
+  $$;
+
+  CREATE OR REPLACE TASK TEST_PROC2
+    WAREHOUSE = ADW_DEFAULT_ADHOC_WH
+    SCHEDULE = 'USING CRON 51 8 * * * GMT'
+AS
+    CALL TASK_TEST_PROC2();
+
+    ALTER TASK TEST_PROC2 RESUME;
+
+    SELECT *
+FROM TABLE(information_schema.task_history())
+WHERE NAME = 'TEST_PROC2';
+
+ALTER TASK TEST_PROC2 SUSPEND;
+
+
+CREATE OR REPLACE PROCEDURE TASK_TEST_PROC3()
+  RETURNS VARCHAR
+  LANGUAGE JAVASCRIPT
+  EXECUTE AS CALLER
+  AS
+  $$
+snowflake.execute({"sqlText": "SET TD_start_week = 1026"});
+snowflake.execute({"sqlText": "SET start_print_date = '2020-03-30'"});
+snowflake.execute({"sqlText": "SET end_print_date = '2020-04-18'"});
+snowflake.execute({"sqlText": "SET end_first_week = '2020-04-03'"});
+snowflake.execute({"sqlText": "SET campaignID = 218924"});
+snowflake.execute({"sqlText": "SET end_date = '2020-04-26'"});
+
+
+var SQL_COMMAND_1 = `insert overwrite into CUSTOMER_ANALYTICS.REPORTING.TD_MSTR_OUTPUT_SIG
+select *
+from TD_mstr_output_sig
+order by 1;`;
+
+var SQL_COMMAND_2 = `insert overwrite into CUSTOMER_ANALYTICS.REPORTING.TD_MSTR_OUTPUT_WAVES_SIG
+select *
+from TD_mstr_output_waves_sig
+order by 1;`;
+
+
+var RS_1 = snowflake.execute({sqlText:SQL_COMMAND_1});
+var RS_2 = snowflake.execute({sqlText:SQL_COMMAND_2});
+
+
+
+  return "END";
+
+  $$;
